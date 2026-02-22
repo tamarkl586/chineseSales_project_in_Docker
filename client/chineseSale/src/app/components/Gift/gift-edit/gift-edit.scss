@@ -6,8 +6,17 @@
   text-align: center;
   font-size: 1.3rem;
   font-weight: 700;
-  color: #333;
+  color: #3a1a0a;
   margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  svg {
+    color: #8b4513;
+    flex-shrink: 0;
+  }
 }
 
 .gift-form {
@@ -22,15 +31,23 @@
   gap: 4px;
 
   label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
     font-weight: 600;
     font-size: 0.9rem;
-    color: #555;
+    color: #5a3e2b;
+
+    svg {
+      color: #8b4513;
+      flex-shrink: 0;
+    }
   }
 }
 
 .form-control {
   padding: 10px 14px;
-  border: 1.5px solid #ddd;
+  border: 1.5px solid #d5cec7;
   border-radius: 8px;
   font-size: 0.95rem;
   font-family: inherit;
@@ -39,9 +56,9 @@
   box-sizing: border-box;
 
   &:focus {
-    border-color: #667eea;
+    border-color: #8b4513;
     outline: none;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.1);
   }
 
   &.border-danger {
@@ -73,7 +90,11 @@
 
 .btn-save {
   flex: 1;
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #8b4513, #a0522d);
   color: white;
   border: none;
   padding: 10px;
@@ -83,9 +104,13 @@
   font-weight: 600;
   font-size: 0.95rem;
   transition: 0.2s;
+  box-shadow: 0 3px 10px rgba(139, 69, 19, 0.25);
+
+  svg { flex-shrink: 0; }
 
   &:hover {
     transform: scale(1.02);
+    box-shadow: 0 5px 16px rgba(139, 69, 19, 0.35);
   }
 
   &:disabled {
@@ -97,9 +122,9 @@
 
 .btn-cancel {
   flex: 1;
-  background: #e0e0e0;
-  color: #555;
-  border: none;
+  background: #f0ebe4;
+  color: #5a3e2b;
+  border: 1.5px solid #d5cec7;
   padding: 10px;
   border-radius: 8px;
   cursor: pointer;
@@ -107,13 +132,17 @@
   font-size: 0.95rem;
 
   &:hover {
-    background: #d0d0d0;
+    background: #e8ddd0;
   }
 }
 
 .btn-delete {
   flex: 1;
-  background: #ef4444;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: #c0392b;
   color: white;
   border: none;
   padding: 10px;
@@ -123,8 +152,10 @@
   font-size: 0.95rem;
   transition: 0.2s;
 
+  svg { flex-shrink: 0; }
+
   &:hover {
-    background: #dc2626;
+    background: #a93226;
     transform: scale(1.02);
   }
 }

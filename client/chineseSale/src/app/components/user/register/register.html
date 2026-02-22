@@ -1,15 +1,23 @@
-<div class="auth-container">
+<div class="auth-page">
+  <div class="auth-decorations">
+    <div class="deco-circle deco-1"></div>
+    <div class="deco-circle deco-2"></div>
+    <div class="deco-circle deco-3"></div>
+  </div>
+
   <div class="auth-card">
+    <div class="card-accent"></div>
+
     <div class="auth-header">
-      <div class="auth-icon">
-        <svg width="56" height="56" viewBox="0 0 56 56" fill="none">
-          <circle cx="28" cy="28" r="28" fill="url(#headerGrad)" />
-          <path d="M28 16c-4.4 0-8 3.6-8 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm0 20c-5.3 0-16 2.7-16 8v2h32v-2c0-5.3-10.7-8-16-8z" fill="#fff"/>
+      <div class="auth-icon-wrap">
+        <svg width="52" height="52" viewBox="0 0 52 52" fill="none">
+          <circle cx="26" cy="26" r="26" fill="url(#headerGrad)" />
+          <path d="M26 15c-4 0-7.5 3.5-7.5 7.5S22 30 26 30s7.5-3.5 7.5-7.5S30 15 26 15zm0 18.5c-5 0-15 2.5-15 7.5v1.5h30V41c0-5-10-7.5-15-7.5z" fill="#fff"/>
           <defs>
-            <linearGradient id="headerGrad" x1="0" y1="0" x2="56" y2="56">
-              <stop offset="0%" stop-color="#ff6b6b"/>
-              <stop offset="50%" stop-color="#ffa502"/>
-              <stop offset="100%" stop-color="#ffd93d"/>
+            <linearGradient id="headerGrad" x1="0" y1="0" x2="52" y2="52">
+              <stop offset="0%" stop-color="#3a1a0a"/>
+              <stop offset="50%" stop-color="#8b4513"/>
+              <stop offset="100%" stop-color="#cd853f"/>
             </linearGradient>
           </defs>
         </svg>
@@ -22,7 +30,7 @@
       <!-- Name Field -->
       <div class="form-group" [class.has-error]="f['name'].touched && f['name'].invalid" [class.has-success]="f['name'].touched && f['name'].valid">
         <label for="name">
-          <i class="field-icon">👤</i>
+          <i class="field-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></i>
           שם מלא
         </label>
         <div class="input-wrapper">
@@ -40,7 +48,7 @@
             <span class="status-icon invalid">✗</span>
           }
           @if (f['name'].pending) {
-            <span class="status-icon checking">⏳</span>
+            <span class="status-icon checking"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/></svg></span>
           }
         </div>
         @if (f['name'].touched && f['name'].errors) {
@@ -60,7 +68,7 @@
           </div>
         }
         @if (f['name'].pending) {
-          <div class="checking-hint">⏳ בודק זמינות שם משתמש...</div>
+          <div class="checking-hint"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px;margin-left:4px"><path d="M6 2v6h.01L10 12l-3.99 4H6v6h12v-6h-.01L14 12l3.99-4H18V2H6z"/></svg> בודק זמינות שם משתמש...</div>
         }
         @if (f['name'].touched && f['name'].valid && !f['name'].pending) {
           <div class="success-hint">✓ שם תקין</div>
@@ -70,7 +78,7 @@
       <!-- Phone Field -->
       <div class="form-group" [class.has-error]="f['phone'].touched && f['phone'].invalid" [class.has-success]="f['phone'].touched && f['phone'].valid">
         <label for="phone">
-          <i class="field-icon">📱</i>
+          <i class="field-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></i>
           טלפון
         </label>
         <div class="input-wrapper">
@@ -116,7 +124,7 @@
       <!-- Email Field -->
       <div class="form-group" [class.has-error]="f['email'].touched && f['email'].invalid" [class.has-success]="f['email'].touched && f['email'].valid">
         <label for="email">
-          <i class="field-icon">📧</i>
+          <i class="field-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></i>
           אימייל
         </label>
         <div class="input-wrapper">
@@ -124,7 +132,7 @@
             type="email"
             id="email"
             formControlName="email"
-            placeholder="example@email.com"
+            placeholder="example&#64;email.com"
             autocomplete="email"
             dir="ltr"
           />
@@ -135,7 +143,7 @@
             <span class="status-icon invalid">✗</span>
           }
           @if (f['email'].pending) {
-            <span class="status-icon checking">⏳</span>
+            <span class="status-icon checking"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/></svg></span>
           }
         </div>
         @if (f['email'].touched && f['email'].errors) {
@@ -167,7 +175,7 @@
           </div>
         }
         @if (f['email'].pending) {
-          <div class="checking-hint">⏳ בודק זמינות אימייל...</div>
+          <div class="checking-hint"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px;margin-left:4px"><path d="M6 2v6h.01L10 12l-3.99 4H6v6h12v-6h-.01L14 12l3.99-4H18V2H6z"/></svg> בודק זמינות אימייל...</div>
         }
         @if (f['email'].touched && f['email'].valid && !f['email'].pending) {
           <div class="success-hint">✓ אימייל תקין</div>
@@ -177,7 +185,7 @@
       <!-- Password Field -->
       <div class="form-group" [class.has-error]="f['password'].touched && f['password'].invalid" [class.has-success]="f['password'].touched && f['password'].valid">
         <label for="password">
-          <i class="field-icon">🔒</i>
+          <i class="field-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></i>
           סיסמה
         </label>
         <div class="input-wrapper">
@@ -190,7 +198,11 @@
             dir="ltr"
           />
           <button type="button" class="toggle-password" (click)="togglePassword()" tabindex="-1">
-            {{ showPassword ? '🙈' : '👁️' }}
+            @if (showPassword) {
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+            } @else {
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            }
           </button>
         </div>
         @if (f['password'].touched && f['password'].errors) {
@@ -232,13 +244,13 @@
       <!-- Error / Success Messages -->
       @if (errorMsg) {
         <div class="alert alert-error">
-          <span class="alert-icon">⚠️</span>
+          <span class="alert-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
           <span>{{ errorMsg }}</span>
         </div>
       }
       @if (successMsg) {
         <div class="alert alert-success">
-          <span class="alert-icon">🎉</span>
+          <span class="alert-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></span>
           <span>{{ successMsg }}</span>
         </div>
       }
@@ -258,6 +270,10 @@
           <span class="btn-arrow">←</span>
         }
       </button>
+
+      <div class="auth-divider">
+        <span>או</span>
+      </div>
 
       <div class="auth-footer">
         <span>כבר יש לך חשבון?</span>

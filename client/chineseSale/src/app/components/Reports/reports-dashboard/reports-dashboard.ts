@@ -88,4 +88,12 @@ export class ReportsDashboard implements OnInit {
   togglePurchaser(p: PurchaserDetailsModel) {
     this.expandedPurchaser = this.expandedPurchaser?.userId === p.userId ? undefined : p;
   }
+
+  getPurchasersTotalTickets(): number {
+    return this.purchasers.reduce((sum, p) => sum + p.totalTicketsPurchased, 0);
+  }
+
+  getPurchasersTotalRevenue(): number {
+    return this.purchasers.reduce((sum, p) => sum + p.grandTotalSpent, 0);
+  }
 }

@@ -97,11 +97,12 @@ namespace project1.DAL.Implementations
             => _context.Carts
                 .AsNoTracking()
                 .Where(c => c.IsPurchased)
-                .GroupBy(c => new { c.GiftID, c.Gift!.Name, c.Gift.Price })
+                .GroupBy(c => new { c.GiftID, c.Gift!.Name, c.Gift.Price, c.Gift.Picture })
                 .Select(g => new TopGiftStatsDTO
                 {
                     GiftId = g.Key.GiftID,
                     GiftName = g.Key.Name,
+                    Picture = g.Key.Picture,
                     Price = g.Key.Price,
                     TotalTicketsPurchased = g.Sum(x => x.Quantity),
                     TotalEarned = g.Sum(x => x.Quantity * x.Gift!.Price)
@@ -111,17 +112,17 @@ namespace project1.DAL.Implementations
         {
             var query = BuildTopGiftQuery();
 
-            if (string.Equals(criteria, "expensive", StringComparison.OrdinalIgnoreCase))
-            {
-                query = query
-                    .OrderByDescending(x => x.Price)
-                    .ThenByDescending(x => x.TotalEarned);
-            }
-            else if (string.Equals(criteria, "purchased", StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(criteria, "tickets", StringComparison.OrdinalIgnoreCase))
             {
                 query = query
                     .OrderByDescending(x => x.TotalTicketsPurchased)
-                    .ThenByDescending(x => x.Price);
+                    .ThenByDescending(x => x.TotalEarned);
+            }
+            else if (string.Equals(criteria, "revenue", StringComparison.OrdinalIgnoreCase))
+            {
+                query = query
+                    .OrderByDescending(x => x.TotalEarned)
+                    .ThenByDescending(x => x.TotalTicketsPurchased);
             }
 
             return await query.FirstOrDefaultAsync();

@@ -59,8 +59,10 @@ namespace project1.Mapping
             CreateMap<Cart, CartItemDTO>()
                 .ForMember(dest => dest.GiftName, opt => opt.MapFrom(src => src.Gift.Name))
                 .ForMember(dest => dest.GiftDescription, opt => opt.MapFrom(src => src.Gift.Description))
+                .ForMember(dest => dest.GiftPicture, opt => opt.MapFrom(src => src.Gift.Picture))
                 .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Gift.Price))
-                .ForMember(dest => dest.TotalPrice, opt => opt.MapFrom(src => src.Quantity * src.Gift.Price));
+                .ForMember(dest => dest.TotalPrice, opt => opt.MapFrom(src => src.Quantity * src.Gift.Price))
+                .ForMember(dest => dest.IsDrawn, opt => opt.MapFrom(src => src.Gift.WinnerId != null));
 
             CreateMap<AddToCartDTO, Cart>()
                 .ForMember(dest => dest.GiftID, opt => opt.MapFrom(src => src.GiftId));
@@ -87,6 +89,7 @@ namespace project1.Mapping
 
             CreateMap<Gift, GiftWinnerReportDTO>()
                 .ForMember(dest => dest.GiftName, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.Picture, opt => opt.MapFrom(src => src.Picture))
                 .ForMember(dest => dest.WinnerName, opt => opt.MapFrom(src => src.Winner != null ? src.Winner.Name : "טרם הוגרל זוכה"))
                 .ForMember(dest => dest.ContactEmail, opt => opt.MapFrom(src => src.Winner != null ? src.Winner.Email : "N/A"));
 
@@ -105,11 +108,14 @@ namespace project1.Mapping
             CreateMap<Gift, TopGiftsDTO>()
                 .ForMember(dest => dest.GiftId, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.GiftName, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.Picture, opt => opt.MapFrom(src => src.Picture))
+                .ForMember(dest => dest.WinnerName, opt => opt.MapFrom(src => src.Winner != null ? src.Winner.Name : "N/A"))
                 .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price))
                 .ForMember(dest => dest.TotalTicketsPurchased, opt => opt.MapFrom(src => src.Carts.Where(c => c.IsPurchased).Sum(c => c.Quantity)))
                 .ForMember(dest => dest.TotalEarned, opt => opt.MapFrom(src => src.Carts.Where(c => c.IsPurchased).Sum(c => c.Quantity * c.Gift.Price)));
 
-            CreateMap<TopGiftStatsDTO, TopGiftsDTO>();
+            CreateMap<TopGiftStatsDTO, TopGiftsDTO>()
+                .ForMember(dest => dest.WinnerName, opt => opt.Ignore());
         }
     }
 }

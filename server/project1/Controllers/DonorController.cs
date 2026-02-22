@@ -132,6 +132,11 @@ namespace project1.Controllers
                 _logger.LogWarning("Delete failed: Donor ID {DonorId} not found.", id);
                 return NotFound(new { message = ex.Message });
             }
+            catch (InvalidOperationException ex)
+            {
+                _logger.LogWarning("Delete blocked: Donor ID {DonorId} has associated gifts.", id);
+                return Conflict(new { message = ex.Message });
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error deleting donor ID: {DonorId}", id);

@@ -12,8 +12,21 @@ import { CartService } from '../../../services/Cart/cart-service';
 export class Cart implements OnInit {
   items: CartItemModel[] = [];
   totalCartPrice: number = 0;
+  totalTickets: number = 0;
   isLoading = false;
   errorMsg = '';
+
+  get validItems(): CartItemModel[] {
+    return this.items.filter(i => !i.isDrawn);
+  }
+
+  get drawnItems(): CartItemModel[] {
+    return this.items.filter(i => i.isDrawn);
+  }
+
+  get hasValidItems(): boolean {
+    return this.validItems.length > 0;
+  }
 
   constructor(private cartService: CartService) { }
 
@@ -43,7 +56,9 @@ export class Cart implements OnInit {
   }
 
   calculateTotal() {
-    this.totalCartPrice = this.items.reduce((acc, item) => acc + item.totalPrice, 0);
+    const valid = this.validItems;
+    this.totalCartPrice = valid.reduce((acc, item) => acc + item.totalPrice, 0);
+    this.totalTickets = valid.reduce((acc, item) => acc + item.quantity, 0);
   }
 
   updateQty(cartId: number, currentQty: number, delta: number) {

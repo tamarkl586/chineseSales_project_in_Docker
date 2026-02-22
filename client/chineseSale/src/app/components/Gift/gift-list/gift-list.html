@@ -1,19 +1,73 @@
-<div class="page-header">
-  <h2 class="page-title">בואו לבחור את הפרסים שלכם</h2>
-  <p class="page-subtitle">בחרו מתנות ורכשו כרטיסים להגרלה</p>
+<!-- ===== HERO HEADER ===== -->
+<div class="gift-hero">
+  <div class="hero-bg-pattern"></div>
+  <div class="hero-content">
+    <div class="hero-icon">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 12 20 22 4 22 4 12"/>
+        <rect x="2" y="7" width="20" height="5"/>
+        <line x1="12" y1="22" x2="12" y2="7"/>
+        <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/>
+        <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
+      </svg>
+    </div>
+    <h2>בואו לבחור את הפרסים שלכם</h2>
+    <p class="hero-subtitle">בחרו מתנות ורכשו כרטיסים להגרלה</p>
+  </div>
 </div>
 
-<!-- ===== MANAGER SEARCH ===== -->
+<!-- ===== MANAGER FILTER: Pill-style dropdowns ===== -->
 @if (authService.isManager()) {
-<div class="search-panel manager-search">
-  <h4>🔍 חיפוש מתקדם (מנהל)</h4>
-  <div class="search-fields">
-    <input type="text" [(ngModel)]="mgrFilterName" placeholder="שם מתנה..." class="search-input" />
-    <input type="text" [(ngModel)]="mgrFilterDonor" placeholder="שם תורם..." class="search-input" />
-    <input type="number" [(ngModel)]="mgrFilterBuyers" placeholder="מינימום קונים..." class="search-input" />
-    <button class="btn-search" (click)="managerSearch()">חפש</button>
-    <button class="btn-clear" (click)="clearManagerSearch()">נקה</button>
+<div class="category-bar mgr-filter-bar">
+  <button class="cat-pill" [class.active]="!mgrFilterName && !mgrFilterCategory && !mgrFilterDonor"
+    (click)="clearManagerSearch()">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg> כל הפרסים
+  </button>
+
+  <div class="filter-pill-wrapper" [class.active]="!!mgrFilterName">
+    <svg class="filter-pill-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+    <select class="filter-select" [(ngModel)]="mgrFilterName" (ngModelChange)="applyManagerFilters()">
+      <option value="">שם מתנה</option>
+      @for (name of giftNames; track name) {
+        <option [value]="name">{{ name }}</option>
+      }
+    </select>
+    <span class="filter-arrow">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+    </span>
   </div>
+
+  <div class="filter-pill-wrapper" [class.active]="!!mgrFilterCategory">
+    <svg class="filter-pill-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+    <select class="filter-select" [(ngModel)]="mgrFilterCategory" (ngModelChange)="applyManagerFilters()">
+      <option value="">קטגוריה</option>
+      @for (cat of categories; track cat.id) {
+        <option [value]="cat.name">{{ cat.name }}</option>
+      }
+    </select>
+    <span class="filter-arrow">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+    </span>
+  </div>
+
+  <div class="filter-pill-wrapper" [class.active]="!!mgrFilterDonor">
+    <svg class="filter-pill-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+    <select class="filter-select" [(ngModel)]="mgrFilterDonor" (ngModelChange)="applyManagerFilters()">
+      <option value="">תורם</option>
+      @for (donor of donorNames; track donor) {
+        <option [value]="donor">{{ donor }}</option>
+      }
+    </select>
+    <span class="filter-arrow">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+    </span>
+  </div>
+
+  @if (mgrFilterName || mgrFilterCategory || mgrFilterDonor) {
+    <button class="cat-pill clear-pill" (click)="clearManagerSearch()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> נקה סינון
+    </button>
+  }
 </div>
 }
 
@@ -21,7 +75,7 @@
 @if (!authService.isManager()) {
 <div class="category-bar">
   <a routerLink="/gifts" class="cat-pill" [class.active]="filterCategory === ''" (click)="filterByCategory('')">
-    🎁 כל הפרסים
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg> כל הפרסים
   </a>
   @for (cat of categories; track cat.id) {
     <button class="cat-pill" [class.active]="filterCategory === cat.name" (click)="filterByCategory(cat.name)">
@@ -33,17 +87,12 @@
 
 <!-- ===== MANAGER ADD BUTTON ===== -->
 @if (authService.isManager()) {
-  <button class="btn-add" (click)="addGift()">➕ הוספת מתנה חדשה</button>
+  <button class="btn-add" (click)="addGift()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> הוספת מתנה חדשה</button>
 }
 
 <!-- ===== MANAGER VIEW: Card Rows ===== -->
 @if (authService.isManager()) {
 <div class="mgr-cards-container">
-  <!-- "All gifts" navigation pill -->
-  <div class="category-bar mgr-category-bar">
-    <a routerLink="/gifts" class="cat-pill active">🎁 כל הפרסים</a>
-  </div>
-
   @for(g of (filteredGifts ?? (gifts$ | async)); track g.id) {
     <div class="mgr-card-row" [class.won]="g.winnerName != 'N/A'">
       <!-- Image section with winner overlay -->
@@ -51,14 +100,20 @@
         @if (g.picture) {
           <img [src]="'images/' + g.picture" [alt]="g.name" class="mgr-card-image" />
         } @else {
-          <div class="mgr-card-no-image">🎁</div>
+          <div class="mgr-card-no-image"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg></div>
         }
         <!-- Winner overlay (similar to user view) -->
         @if (g.winnerName != 'N/A') {
           <div class="winner-overlay">
             <div class="winner-overlay-content">
-              <span class="winner-icon">🏆</span>
-              <span class="winner-label">זוכה</span>
+<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5C6 4 6 9 6 9z"/>
+              <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5C18 4 18 9 18 9z"/>
+              <path d="M4 22h16"/>
+              <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20 7 22"/>
+              <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20 17 22"/>
+              <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>
+            </svg>              <span class="winner-label">זוכה</span>
               <span class="winner-name">{{ g.winnerName }}</span>
               @if (g.winnerEmail) {
                 <span class="winner-email">{{ g.winnerEmail }}</span>
@@ -74,29 +129,51 @@
           <h3 class="card-title">{{ g.name }}</h3>
         </a>
         <div class="mgr-card-info">
-          <span class="mgr-info-item">📝 {{ g.description }}</span>
-          <span class="mgr-info-item">💰 {{ g.price }} ₪</span>
-          <span class="mgr-info-item">🤝 {{ g.donorName }}</span>
-          <span class="mgr-info-item">📂 {{ g.categoryName }}</span>
+          <span class="mgr-info-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> {{ g.description }}</span>
+          <span class="mgr-info-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> {{ g.price }} ₪</span>
+          <span class="mgr-info-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> {{ g.donorName }}</span>
+          <span class="mgr-info-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg> {{ g.categoryName }}</span>
         </div>
       </div>
 
       <!-- Winner announcement banner (shows immediately after draw) -->
       @if (drawnWinners[g.id]) {
         <div class="winner-banner">
-          <h4>🎉 הזוכה בהגרלה 🎉</h4>
+          <h4><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg> הזוכה בהגרלה <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></h4>
           <p><strong>שם:</strong> {{ drawnWinners[g.id].name }}</p>
           <p><strong>אימייל:</strong> {{ drawnWinners[g.id].email }}</p>
-          <p class="email-notice">📧 מייל נשלח לזוכה</p>
+          <p class="email-notice"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> מייל נשלח לזוכה</p>
         </div>
       }
 
       <!-- Actions -->
       <div class="mgr-card-actions">
         @if (g.winnerName == 'N/A' && !drawnWinners[g.id]) {
-          <button class="btn-edit" (click)="openEdit(g.id)">✏️ עריכה</button>
-          <button class="btn-draw" (click)="drawWinner(g.id, $event)">🎰 הגרלה</button>
-          <button class="btn-add-cart" (click)="addToCart(g); $event.stopPropagation()">🛒 הוסף לסל</button>
+          <div class="mgr-action-btns">
+            <button class="btn-edit" (click)="openEdit(g.id)">
+              <span class="btn-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span>
+              <span class="btn-label">עריכה</span>
+            </button>
+            <button class="btn-draw" (click)="drawWinner(g.id, $event)">
+              <span class="btn-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="7" x2="7.01" y2="7"/><line x1="12" y1="12" x2="12.01" y2="12"/><line x1="17" y1="17" x2="17.01" y2="17"/></svg></span>
+              <span class="btn-label">הגרלה</span>
+            </button>
+          </div>
+          <div class="mgr-qty-section">
+            <span class="mgr-qty-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> כרטיסים</span>
+            <div class="qty-row">
+              <button class="qty-btn qty-plus" (click)="incrementQty(g)" [disabled]="loading[g.id]">+</button>
+              <input
+                type="number"
+                class="qty-input"
+                [value]="getQuantity(g.id)"
+                (change)="onQtyChange(g, $event)"
+                min="0"
+                max="100"
+              />
+              <button class="qty-btn qty-minus" (click)="decrementQty(g)" [disabled]="loading[g.id] || getQuantity(g.id) <= 0">−</button>
+            </div>
+          </div>
         }
         @if (cartMessages[g.id]) {
           <span class="cart-msg">{{ cartMessages[g.id] }}</span>
@@ -117,13 +194,13 @@
         @if (g.picture) {
           <img [src]="'images/' + g.picture" [alt]="g.name" class="card-image" />
         } @else {
-          <div class="card-no-image">🎁</div>
+          <div class="card-no-image"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg></div>
         }
         <!-- Winner overlay -->
         @if (g.winnerName != 'N/A') {
           <div class="winner-overlay">
             <div class="winner-overlay-content">
-              <span class="winner-icon">🏆</span>
+              <span class="winner-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg></span>
               <span class="winner-label">זוכה</span>
               <span class="winner-name">{{ g.winnerName }}</span>
             </div>
@@ -155,7 +232,7 @@
               <button class="qty-btn qty-minus" (click)="decrementQty(g)" [disabled]="loading[g.id] || getQuantity(g.id) <= 0">−</button>
             </div>
           } @else {
-            <button class="btn-login-to-buy" (click)="goToLogin()">🔑 התחבר כדי לקנות</button>
+            <button class="btn-login-to-buy" (click)="goToLogin()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg> התחבר כדי לקנות</button>
           }
         }
         @if (cartMessages[g.id]) {

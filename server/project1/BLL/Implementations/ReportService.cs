@@ -24,14 +24,15 @@ namespace project1.BLL.Implementations
 
         public async Task<List<GiftWinnerReportDTO>> GetWinnersReportAsync()
         {
-            _logger.LogDebug("Fetching all gifts with winners for report generation.");
+            _logger.LogDebug("Fetching only gifts with winners for report generation.");
 
             var gifts = await _giftDal.GetSearchQuery()
+                .Where(g => g.WinnerId != null)
                 .Include(g => g.Winner)
                 .AsNoTracking()
                 .ToListAsync();
 
-            _logger.LogInformation("Successfully retrieved {Count} gifts for winners report.", gifts.Count);
+            _logger.LogInformation("Successfully retrieved {Count} gifts with winners for report.", gifts.Count);
             return _mapper.Map<List<GiftWinnerReportDTO>>(gifts);
         }
 

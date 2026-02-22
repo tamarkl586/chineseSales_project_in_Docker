@@ -139,8 +139,28 @@ namespace project1.BLL.Implementations
                 throw new InvalidOperationException("Cart is empty.");
             }
 
+            // Filter out gifts that have already been drawn
+            var drawnItems = items.Where(i => i.Gift != null && i.Gift.WinnerId != null).ToList();
+            var validItems = items.Where(i => i.Gift == null || i.Gift.WinnerId == null).ToList();
+
+            // Remove drawn items from cart automatically
+            if (drawnItems.Any())
+            {
+                _logger.LogInformation("Removing {Count} drawn gift(s) from cart for User {UserId}", drawnItems.Count, userId);
+                foreach (var drawnItem in drawnItems)
+                {
+                    await _cartDal.DeleteAsync(drawnItem);
+                }
+            }
+
+            if (!validItems.Any())
+            {
+                _logger.LogWarning("Purchase failed: All items in cart for User {UserId} have already been drawn.", userId);
+                throw new InvalidOperationException("כל הפריטים בסל כבר הוגרלו והוסרו. לא ניתן לבצע רכישה.");
+            }
+
             await _cartDal.ExecutePurchaseAsync(userId);
-            _logger.LogInformation("Transaction finalized for User {UserId}. All open items marked as purchased.", userId);
+            _logger.LogInformation("Transaction finalized for User {UserId}. {Valid} items purchased, {Drawn} drawn items removed.", userId, validItems.Count, drawnItems.Count);
         }
 
         public async Task ClearCartAsync(int userId)
@@ -172,8 +192,8 @@ namespace project1.BLL.Implementations
                 throw new ArgumentException("A valid search type must be provided.", nameof(criteria));
 
             var normalized = criteria.Trim().ToLowerInvariant();
-            if (normalized != "expensive" && normalized != "purchased")
-                throw new ArgumentException("Invalid search value. Only 'expensive' or 'purchased' are allowed.", nameof(criteria));
+            if (normalized != "tickets" && normalized != "revenue")
+                throw new ArgumentException("Invalid search value. Only 'tickets' or 'revenue' are allowed.", nameof(criteria));
 
             _logger.LogInformation("Admin requested top gift by criteria {Criteria}", normalized);
 
@@ -185,7 +205,16 @@ namespace project1.BLL.Implementations
                 return null;
             }
 
-            return _mapper.Map<TopGiftsDTO>(stat);
+            var dto = _mapper.Map<TopGiftsDTO>(stat);
+
+            // Fetch Gift entity to get winner info
+            var gift = await _giftDal.GetByIdAsync(stat.GiftId);
+            if (gift?.Winner != null)
+            {
+                dto.WinnerName = gift.Winner.Name;
+            }
+
+            return dto;
         }
 
         public async Task<PurchaserDetailsDTO> GetPurchaserDetailsAsync(int userId)

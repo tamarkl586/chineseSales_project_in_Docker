@@ -20,4 +20,12 @@ export class CartReport {
       error: (err: any) => console.error('שגיאה בטעינת הדוח', err)
     });
   }
+
+  getTotalTickets(): number {
+    return this.reports.reduce((sum, r) => sum + r.totalTicketsPurchased, 0);
+  }
+
+  getTotalRevenue(): number {
+    return this.reports.reduce((sum, r) => sum + r.grandTotalSpent, 0);
+  }
 }

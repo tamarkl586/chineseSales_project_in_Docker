@@ -1,24 +1,61 @@
 @if (donor) {
 <div class="donor-details-card">
-  <div class="detail-header">
-    <h4>👤 פרטי תורם: {{donor.name}}</h4>
+  <div class="detail-grid">
+    <div class="detail-item">
+      <div class="detail-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/></svg>
+      </div>
+      <div class="detail-text">
+        <span class="detail-label">תעודת זהות</span>
+        <span class="detail-value" dir="ltr">{{ donor.identityNumber }}</span>
+      </div>
+    </div>
+    <div class="detail-item">
+      <div class="detail-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      </div>
+      <div class="detail-text">
+        <span class="detail-label">אימייל</span>
+        <span class="detail-value" dir="ltr">{{ donor.email }}</span>
+      </div>
+    </div>
+    <div class="detail-item">
+      <div class="detail-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      </div>
+      <div class="detail-text">
+        <span class="detail-label">טלפון</span>
+        <span class="detail-value" dir="ltr">{{ donor.phone }}</span>
+      </div>
+    </div>
   </div>
-  <div class="detail-info">
-    <p>🆔 ת.ז.: <strong>{{donor.identityNumber}}</strong></p>
-    <p>📧 אימייל: <strong>{{donor.email}}</strong></p>
-    <p>📱 טלפון: <strong>{{donor.phone}}</strong></p>
-  </div>
+
   @if (donor.gifts && donor.gifts.length > 0) {
   <div class="gifts-section">
-    <h5>🎁 מתנות שתרם:</h5>
+    <div class="gifts-header">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+      <h5 class="gifts-title">מתנות שתרם ({{ donor.gifts.length }})</h5>
+    </div>
     <div class="gift-tags">
       @for (gift of donor.gifts; track gift.id) {
-        <span class="gift-tag">{{gift.name}}</span>
+        <span class="gift-tag">
+          @if (gift.picture) {
+            <img [src]="'images/' + gift.picture" [alt]="gift.name" class="gift-tag-img" />
+          } @else {
+            <div class="gift-tag-placeholder">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/></svg>
+            </div>
+          }
+          {{ gift.name }}
+        </span>
       }
     </div>
   </div>
   } @else {
-    <p class="no-gifts">אין מתנות משויכות</p>
+    <div class="no-gifts">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+      <span>אין מתנות משויכות לתורם זה</span>
+    </div>
   }
 </div>
 }

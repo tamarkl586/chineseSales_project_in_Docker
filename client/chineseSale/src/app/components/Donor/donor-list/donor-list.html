@@ -1,62 +1,205 @@
 <div class="donor-page">
-  <div class="page-header">
-    <h2>🤝 ניהול תורמים</h2>
-    <button class="btn-add" (click)="openAdd()">➕ הוסף תורם חדש</button>
-  </div>
 
-  <div class="search-panel">
-    <h4>🔍 חיפוש תורמים</h4>
-    <div class="search-fields">
-      <input type="text" [(ngModel)]="searchName" placeholder="שם תורם..." class="search-input" />
-      <input type="text" [(ngModel)]="searchGift" placeholder="שם מתנה..." class="search-input" />
-      <input type="text" [(ngModel)]="searchEmail" placeholder="אימייל..." class="search-input" />
-      <button class="btn-search" (click)="search()">חפש</button>
-      <button class="btn-clear" (click)="clearSearch()">נקה</button>
+  <!-- ===== HERO HEADER ===== -->
+  <div class="donor-hero">
+    <div class="hero-bg-pattern"></div>
+    <div class="hero-content">
+      <div class="hero-icon">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+      </div>
+      <h2>ניהול תורמים</h2>
+      <p class="hero-subtitle">ניהול רשימת התורמים והמתנות שלהם</p>
     </div>
   </div>
 
-  @if (donors.length === 0) {
-    <div class="empty-state">אין תורמים להצגה</div>
+  <!-- ===== SUMMARY BAR ===== -->
+  @if (allDonors.length > 0) {
+  <div class="summary-bar">
+    <div class="summary-item">
+      <div class="summary-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
+      <div class="summary-data">
+        <span class="summary-number">{{ allDonors.length }}</span>
+        <span class="summary-text">תורמים</span>
+      </div>
+    </div>
+    <div class="summary-divider"></div>
+    <div class="summary-item">
+      <div class="summary-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg></div>
+      <div class="summary-data">
+        <span class="summary-number">{{ totalGifts }}</span>
+        <span class="summary-text">מתנות</span>
+      </div>
+    </div>
+    <div class="summary-divider"></div>
+    <div class="summary-item">
+      <div class="summary-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+      <div class="summary-data">
+        <span class="summary-number">{{ donorEmails.length }}</span>
+        <span class="summary-text">אימיילים</span>
+      </div>
+    </div>
+  </div>
   }
 
-  <div class="donors-table-wrap">
-    <table class="donors-table">
-      <thead>
-        <tr>
-          <th>ת.ז.</th>
-          <th>שם</th>
-          <th>טלפון</th>
-          <th>אימייל</th>
-          <th>פעולות</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (d of donors; track d.id) {
-        <tr (click)="toggleDetails(d)" class="donor-row" [class.expanded]="expandedDonor?.id === d.id">
-          <td>{{d.identityNumber}}</td>
-          <td><strong>{{d.name}}</strong></td>
-          <td>{{d.phone}}</td>
-          <td>{{d.email}}</td>
-          <td class="actions-cell">
-            <button class="btn-edit" (click)="openEdit(d); $event.stopPropagation()">✏️ ערוך</button>
-            <button class="btn-delete" (click)="delete(d.id); $event.stopPropagation()">🗑️ מחק</button>
-          </td>
-        </tr>
-        @if (expandedDonor?.id === d.id) {
-        <tr class="details-row">
-          <td colspan="5">
-            <app-donor-details [donor]="expandedDonor"></app-donor-details>
-          </td>
-        </tr>
+  <!-- ===== FILTER BAR ===== -->
+  <div class="filter-bar">
+    <button class="filter-chip" [class.active]="!filterName && !filterGift && !filterEmail"
+      (click)="clearFilters()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+      כל התורמים
+    </button>
+
+    <div class="filter-pill-wrapper" [class.active]="!!filterName">
+      <svg class="filter-pill-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <select class="filter-select" [(ngModel)]="filterName" (ngModelChange)="applyFilters()">
+        <option value="">שם תורם</option>
+        @for (name of donorNames; track name) {
+          <option [value]="name">{{ name }}</option>
         }
+      </select>
+      <span class="filter-arrow">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </span>
+    </div>
+
+    <div class="filter-pill-wrapper" [class.active]="!!filterGift">
+      <svg class="filter-pill-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+      <select class="filter-select" [(ngModel)]="filterGift" (ngModelChange)="applyFilters()">
+        <option value="">שם מתנה</option>
+        @for (name of giftNames; track name) {
+          <option [value]="name">{{ name }}</option>
         }
-      </tbody>
-    </table>
+      </select>
+      <span class="filter-arrow">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </span>
+    </div>
+
+    <div class="filter-pill-wrapper" [class.active]="!!filterEmail">
+      <svg class="filter-pill-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      <select class="filter-select" [(ngModel)]="filterEmail" (ngModelChange)="applyFilters()">
+        <option value="">אימייל</option>
+        @for (email of donorEmails; track email) {
+          <option [value]="email">{{ email }}</option>
+        }
+      </select>
+      <span class="filter-arrow">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </span>
+    </div>
+
+    @if (filterName || filterGift || filterEmail) {
+      <button class="filter-chip clear-chip" (click)="clearFilters()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        נקה סינון
+      </button>
+    }
   </div>
 
+  <!-- ===== ADD BUTTON ===== -->
+  <button class="btn-add" (click)="openAdd()">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    הוסף תורם חדש
+  </button>
+
+  <!-- Delete error toast -->
+  @if (deleteError) {
+    <div class="error-toast">
+      <div class="error-toast-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      </div>
+      <span class="error-toast-msg">{{ deleteError }}</span>
+      <button class="error-close" (click)="deleteError = ''">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+  }
+
+  <!-- ===== EMPTY STATE ===== -->
+  @if (donors.length === 0 && !deleteError) {
+    <div class="empty-state">
+      <div class="empty-icon-wrap">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#c5beb6" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="11" x2="23" y2="11"/></svg>
+      </div>
+      <h3>אין תורמים להצגה</h3>
+      <p>הוסף תורמים חדשים כדי להתחיל לנהל את המתנות</p>
+    </div>
+  }
+
+  <!-- ===== DONOR CARDS ===== -->
+  <div class="donors-container">
+    @for (d of donors; track d.id; let i = $index) {
+      <div class="donor-card" [class.expanded]="expandedDonor?.id === d.id" [style.animation-delay]="i * 50 + 'ms'">
+        <div class="donor-card-header" (click)="toggleDetails(d)">
+          <div class="donor-avatar">
+            <span>{{ d.name?.charAt(0) }}</span>
+          </div>
+          <div class="donor-card-body">
+            <h3 class="donor-name">{{ d.name }}</h3>
+            <div class="donor-contacts">
+              <span class="contact-chip">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/></svg>
+                {{ d.identityNumber }}
+              </span>
+              <span class="contact-chip">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                {{ d.phone }}
+              </span>
+              <span class="contact-chip">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                {{ d.email }}
+              </span>
+            </div>
+          </div>
+          <div class="donor-stats">
+            @if (d.gifts && d.gifts.length > 0) {
+              <div class="stat-badge gifts-badge">
+                <span class="stat-value">{{ d.gifts.length }}</span>
+                <span class="stat-label">מתנות</span>
+              </div>
+            } @else {
+              <div class="stat-badge empty-badge">
+                <span class="stat-value">0</span>
+                <span class="stat-label">מתנות</span>
+              </div>
+            }
+          </div>
+          <div class="donor-card-actions">
+            <button class="btn-action btn-edit" (click)="openEdit(d); $event.stopPropagation()" title="ערוך">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              <span>ערוך</span>
+            </button>
+            <button class="btn-action btn-delete" (click)="delete(d.id); $event.stopPropagation()" title="מחק">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+              <span>מחק</span>
+            </button>
+          </div>
+          <div class="expand-indicator" [class.open]="expandedDonor?.id === d.id">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+
+        @if (expandedDonor?.id === d.id) {
+          <div class="donor-details-expand">
+            <app-donor-details [donor]="expandedDonor"></app-donor-details>
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- ===== MODAL ===== -->
   @if (showForm) {
   <div class="modal-overlay" (click)="showForm = false">
     <div class="modal-content" (click)="$event.stopPropagation()">
+      <button class="modal-close" (click)="showForm = false">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
       <app-donor-form [donorToEdit]="selectedDonor" (close)="refresh()"></app-donor-form>
     </div>
   </div>

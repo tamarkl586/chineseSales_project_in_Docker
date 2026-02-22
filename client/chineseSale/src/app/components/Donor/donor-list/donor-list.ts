@@ -13,14 +13,26 @@ import { DonorDetails } from '../donor-details/donor-details';
 })
 export class DonorList {
   donors: DonorModel[] = [];
+  allDonors: DonorModel[] = [];
   showForm = false;
   selectedDonor?: DonorModel;
   expandedDonor?: DonorModel;
 
-  // Search fields
-  searchName = '';
-  searchGift = '';
-  searchEmail = '';
+  // Filter fields (pill-style like gift list)
+  filterName = '';
+  filterGift = '';
+  filterEmail = '';
+
+  // Unique values for filter dropdowns
+  donorNames: string[] = [];
+  giftNames: string[] = [];
+  donorEmails: string[] = [];
+
+  // Delete error message
+  deleteError = '';
+
+  // Summary stats
+  totalGifts = 0;
 
   constructor(private donorService: DonorService) {}
 
@@ -31,22 +43,40 @@ export class DonorList {
   refresh() {
     this.showForm = false;
     this.selectedDonor = undefined;
-    this.donorService.getAll().subscribe(res => this.donors = res);
+    this.donorService.getAll().subscribe(res => {
+      this.donors = res;
+      this.allDonors = res;
+      this.donorNames = [...new Set(res.map(d => d.name))].sort();
+      this.giftNames = [...new Set(res.flatMap(d => d.gifts?.map(g => g.name) || []))].sort();
+      this.donorEmails = [...new Set(res.map(d => d.email).filter(e => !!e))].sort();
+      this.totalGifts = res.reduce((sum, d) => sum + (d.gifts?.length || 0), 0);
+    });
   }
 
-  search() {
-    this.donorService.search(
-      this.searchName || undefined,
-      this.searchGift || undefined,
-      this.searchEmail || undefined
-    ).subscribe(res => this.donors = res);
+  // Pill-style filtering (client-side)
+  applyFilters() {
+    if (!this.filterName && !this.filterGift && !this.filterEmail) {
+      this.donors = this.allDonors;
+      return;
+    }
+    let result = [...this.allDonors];
+    if (this.filterName) {
+      result = result.filter(d => d.name === this.filterName);
+    }
+    if (this.filterGift) {
+      result = result.filter(d => d.gifts?.some(g => g.name === this.filterGift));
+    }
+    if (this.filterEmail) {
+      result = result.filter(d => d.email === this.filterEmail);
+    }
+    this.donors = result;
   }
 
-  clearSearch() {
-    this.searchName = '';
-    this.searchGift = '';
-    this.searchEmail = '';
-    this.refresh();
+  clearFilters() {
+    this.filterName = '';
+    this.filterGift = '';
+    this.filterEmail = '';
+    this.donors = this.allDonors;
   }
 
   openAdd() {
@@ -65,7 +95,15 @@ export class DonorList {
 
   delete(id: number) {
     if (confirm('האם אתה בטוח שברצונך למחוק את התורם?')) {
-      this.donorService.delete(id).subscribe(() => this.refresh());
+      this.deleteError = '';
+      this.donorService.delete(id).subscribe({
+        next: () => this.refresh(),
+        error: (err: any) => {
+          const msg = err.error?.message || 'שגיאה במחיקת התורם';
+          this.deleteError = msg;
+          setTimeout(() => this.deleteError = '', 5000);
+        }
+      });
     }
   }
 }

@@ -1,48 +1,188 @@
 <div class="category-page">
-  <div class="page-header">
-    <h2>📂 ניהול קטגוריות</h2>
-    <button class="btn-add" (click)="openAdd()">➕ הוסף קטגוריה</button>
+  <!-- ===== HERO HEADER ===== -->
+  <div class="category-hero">
+    <div class="hero-bg-pattern"></div>
+    <div class="hero-content">
+      <div class="hero-icon">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7" rx="1.5"/>
+          <rect x="14" y="3" width="7" height="7" rx="1.5"/>
+          <rect x="3" y="14" width="7" height="7" rx="1.5"/>
+          <rect x="14" y="14" width="7" height="7" rx="1.5"/>
+        </svg>
+      </div>
+      <h2>ניהול קטגוריות</h2>
+      <p class="hero-subtitle">ארגן את המתנות לפי קטגוריות מותאמות אישית</p>
+    </div>
   </div>
 
-  @if (categories.length === 0) {
-    <div class="empty-state">אין קטגוריות להצגה</div>
+  <!-- ===== SUMMARY BAR ===== -->
+  <div class="summary-bar">
+    <div class="summary-item">
+      <div class="summary-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7" rx="1"/>
+          <rect x="14" y="3" width="7" height="7" rx="1"/>
+          <rect x="3" y="14" width="7" height="7" rx="1"/>
+          <rect x="14" y="14" width="7" height="7" rx="1"/>
+        </svg>
+      </div>
+      <div class="summary-value">{{ categories.length }}</div>
+      <div class="summary-label">סה"כ קטגוריות</div>
+    </div>
+    <div class="summary-divider"></div>
+    <div class="summary-item">
+      <div class="summary-icon results-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+      </div>
+      <div class="summary-value">{{ filteredCategories.length }}</div>
+      <div class="summary-label">תוצאות מוצגות</div>
+    </div>
+  </div>
+
+  <!-- ===== SEARCH + ADD ===== -->
+  <div class="toolbar">
+    <div class="search-box">
+      <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input
+        type="text"
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="applyFilter()"
+        placeholder="חפש קטגוריה..."
+        class="search-input"
+      />
+      @if (searchTerm) {
+        <button class="search-clear" (click)="searchTerm = ''; applyFilter()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      }
+    </div>
+    <button class="btn-add" (click)="openAdd()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+      הוסף קטגוריה
+    </button>
+  </div>
+
+  <!-- ===== EMPTY STATE ===== -->
+  @if (filteredCategories.length === 0 && categories.length > 0) {
+    <div class="empty-state">
+      <div class="empty-icon">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+      </div>
+      <p class="empty-title">לא נמצאו תוצאות</p>
+      <p class="empty-desc">נסה לחפש במילים אחרות</p>
+    </div>
   }
 
+  @if (categories.length === 0) {
+    <div class="empty-state">
+      <div class="empty-icon">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7" rx="1.5"/>
+          <rect x="14" y="3" width="7" height="7" rx="1.5"/>
+          <rect x="3" y="14" width="7" height="7" rx="1.5"/>
+          <rect x="14" y="14" width="7" height="7" rx="1.5"/>
+        </svg>
+      </div>
+      <p class="empty-title">אין קטגוריות להצגה</p>
+      <p class="empty-desc">הוסף קטגוריה ראשונה כדי להתחיל</p>
+    </div>
+  }
+
+  <!-- ===== CATEGORIES GRID ===== -->
   <div class="categories-grid">
-    @for (cat of categories; track cat.id) {
-    <div class="category-card">
-      <div class="category-icon">📂</div>
-      <div class="category-name">{{ cat.name }}</div>
-      <div class="category-actions">
-        <button class="btn-edit" (click)="openEdit(cat)">✏️</button>
-        <button class="btn-delete" (click)="deleteCategory(cat.id)">🗑️</button>
+    @for (cat of filteredCategories; track cat.id; let i = $index) {
+    <div
+      class="category-card"
+      [style.animation-delay]="(i * 0.06) + 's'"
+      [style.--card-gradient]="getTheme(getCategoryIndex(cat)).gradient"
+      [style.--card-light]="getTheme(getCategoryIndex(cat)).light"
+      [style.--card-text]="getTheme(getCategoryIndex(cat)).text"
+      [style.--card-shadow]="getTheme(getCategoryIndex(cat)).shadow"
+    >
+      <div class="card-accent"></div>
+      <div class="card-body">
+        <div class="card-icon-wrapper">
+          <div class="card-icon" [innerHTML]="getTheme(getCategoryIndex(cat)).icon"></div>
+          <div class="card-number">#{{ getCategoryIndex(cat) + 1 }}</div>
+        </div>
+        <div class="card-name">{{ cat.name }}</div>
+        <div class="card-actions">
+          <button class="action-btn edit-btn" (click)="openEdit(cat)" title="עריכה">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
+          </button>
+          <button class="action-btn delete-btn" (click)="deleteCategory(cat.id)" title="מחיקה">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
     }
   </div>
 
+  <!-- ===== MODAL ===== -->
   @if (showForm) {
   <div class="modal-overlay" (click)="cancelForm()">
     <div class="modal-content" (click)="$event.stopPropagation()">
-      <h3 class="form-title">{{ editingCategory ? '✏️ עריכת קטגוריה' : '➕ הוספת קטגוריה' }}</h3>
+      <button class="modal-close" (click)="cancelForm()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+      <div class="modal-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          @if (editingCategory) {
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+          } @else {
+            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+          }
+        </svg>
+      </div>
+      <h3 class="form-title">{{ editingCategory ? 'עריכת קטגוריה' : 'הוספת קטגוריה חדשה' }}</h3>
 
       <div class="form-group">
-        <label>שם קטגוריה</label>
+        <label>שם הקטגוריה</label>
         <input
           type="text"
           [(ngModel)]="newCategoryName"
-          placeholder="הזן שם קטגוריה..."
+          placeholder="לדוגמה: מוצרי חשמל, ריהוט..."
           class="form-input"
           (keyup.enter)="save()"
         />
       </div>
 
       @if (errorMsg) {
-        <div class="error-msg">⚠️ {{ errorMsg }}</div>
+        <div class="error-msg">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          {{ errorMsg }}
+        </div>
       }
 
       <div class="btn-row">
-        <button class="btn-save" (click)="save()" [disabled]="!newCategoryName.trim()">💾 שמור</button>
+        <button class="btn-save" (click)="save()" [disabled]="!newCategoryName.trim()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+          שמור
+        </button>
         <button class="btn-cancel" (click)="cancelForm()">ביטול</button>
       </div>
     </div>

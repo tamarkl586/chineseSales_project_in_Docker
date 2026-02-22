@@ -3,7 +3,9 @@ export class CartItemModel {
   giftId!: number;
   giftName!: string;
   giftDescription!: string;
+  giftPicture!: string;
   price!: number;
   quantity!: number;
   totalPrice!: number;
+  isDrawn!: boolean;
 }

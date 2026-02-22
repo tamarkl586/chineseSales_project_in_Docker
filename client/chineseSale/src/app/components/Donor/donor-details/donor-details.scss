@@ -1,40 +1,182 @@
+/* ===================================================
+   DONOR DETAILS — Modern Professional Expanded Card
+   =================================================== */
+
 .donor-details-card {
   direction: rtl;
-  padding: 16px 20px;
-  animation: fadeIn 0.2s ease;
+  padding: 24px 28px;
+  animation: fadeIn 0.35s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
-.detail-header h4 {
-  margin: 0 0 10px; font-size: 1.05rem;
-  color: #333;
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
 }
 
-.detail-info p {
-  margin: 4px 0; font-size: 0.9rem; color: #555;
-  strong { color: #333; }
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fff;
+  border-radius: 14px;
+  padding: 14px 18px;
+  border: 1px solid #f0ebe4;
+  transition: all 0.25s cubic-bezier(0.23, 1, 0.32, 1);
+
+  &:hover {
+    box-shadow: 0 4px 16px rgba(139, 69, 19, 0.08);
+    border-color: rgba(139, 69, 19, 0.12);
+    transform: translateY(-1px);
+  }
 }
 
+.detail-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #f8f3ee, #f0ebe4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  svg {
+    stroke: #8b4513;
+  }
+}
+
+.detail-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.detail-label {
+  font-size: 0.72rem;
+  color: #9a8875;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.detail-value {
+  font-size: 0.92rem;
+  color: #2c1206;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Gifts Section */
 .gifts-section {
-  margin-top: 12px;
-  h5 { margin: 0 0 8px; font-size: 0.95rem; color: #444; }
+  margin-top: 4px;
+}
+
+.gifts-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+
+  svg {
+    stroke: #8b4513;
+    flex-shrink: 0;
+  }
+}
+
+.gifts-title {
+  margin: 0;
+  font-size: 0.92rem;
+  color: #2c1206;
+  font-weight: 700;
 }
 
 .gift-tags {
-  display: flex; flex-wrap: wrap; gap: 6px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .gift-tag {
-  background: linear-gradient(135deg, #667eea20, #764ba220);
-  color: #667eea; padding: 4px 12px;
-  border-radius: 16px; font-size: 0.8rem;
-  font-weight: 500; border: 1px solid rgba(102,126,234,0.2);
+  background: #fff;
+  color: #5a3e2b;
+  padding: 7px 16px;
+  border-radius: 12px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  border: 1px solid rgba(139, 69, 19, 0.12);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.25s cubic-bezier(0.23, 1, 0.32, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+
+  &:hover {
+    background: linear-gradient(135deg, #fef5ee, #fdebd6);
+    border-color: rgba(139, 69, 19, 0.2);
+    box-shadow: 0 4px 12px rgba(139, 69, 19, 0.1);
+    transform: translateY(-1px);
+  }
+
+  .gift-tag-img {
+    width: 24px;
+    height: 24px;
+    border-radius: 8px;
+    object-fit: cover;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  .gift-tag-placeholder {
+    width: 24px;
+    height: 24px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #f8f3ee, #f0ebe4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    svg { stroke: #8b4513; opacity: 0.6; }
+  }
 }
 
 .no-gifts {
-  color: #999; font-size: 0.85rem; margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #9a8875;
+  font-size: 0.88rem;
+  margin-top: 4px;
+  padding: 12px 16px;
+  background: rgba(0, 0, 0, 0.02);
+  border-radius: 12px;
+  border: 1px dashed #e8ddd0;
+
+  svg {
+    stroke: #c5beb6;
+    flex-shrink: 0;
+  }
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 480px) {
+  .donor-details-card {
+    padding: 18px 16px;
+  }
+
+  .detail-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .detail-item {
+    padding: 12px 14px;
+  }
 }

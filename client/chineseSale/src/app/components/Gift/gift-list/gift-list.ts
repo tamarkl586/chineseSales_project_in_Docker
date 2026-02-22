@@ -38,7 +38,12 @@ export class GiftList implements OnInit {
   // Manager filters
   mgrFilterName = '';
   mgrFilterDonor = '';
-  mgrFilterBuyers: number | null = null;
+  mgrFilterCategory = '';
+
+  // All gifts cache for client-side filtering
+  allGifts: GiftModel[] = [];
+  giftNames: string[] = [];
+  donorNames: string[] = [];
 
   // Filtered results
   filteredGifts: GiftModel[] | null = null;
@@ -62,6 +67,13 @@ export class GiftList implements OnInit {
     this.giftSrv.refreshGifts();
     this.categorySrv.getAll().subscribe(cats => this.categories = cats);
     this.loadCart();
+
+    // Cache gifts and extract unique names/donors for filter dropdowns
+    this.gifts$.subscribe(gifts => {
+      this.allGifts = gifts;
+      this.giftNames = [...new Set(gifts.map(g => g.name))].sort();
+      this.donorNames = [...new Set(gifts.map(g => g.donorName).filter(d => !!d))].sort();
+    });
   }
 
   /** Load user cart and populate quantities */
@@ -118,19 +130,29 @@ export class GiftList implements OnInit {
     this.filteredGifts = null;
   }
 
-  // Manager search
-  managerSearch() {
-    this.giftSrv.managerSearch(
-      this.mgrFilterName || undefined,
-      this.mgrFilterDonor || undefined,
-      this.mgrFilterBuyers || undefined
-    ).subscribe(res => this.filteredGifts = res);
+  // Manager search (client-side filtering via pill dropdowns)
+  applyManagerFilters() {
+    if (!this.mgrFilterName && !this.mgrFilterCategory && !this.mgrFilterDonor) {
+      this.filteredGifts = null;
+      return;
+    }
+    let result = [...this.allGifts];
+    if (this.mgrFilterName) {
+      result = result.filter(g => g.name === this.mgrFilterName);
+    }
+    if (this.mgrFilterCategory) {
+      result = result.filter(g => g.categoryName === this.mgrFilterCategory);
+    }
+    if (this.mgrFilterDonor) {
+      result = result.filter(g => g.donorName === this.mgrFilterDonor);
+    }
+    this.filteredGifts = result;
   }
 
   clearManagerSearch() {
     this.mgrFilterName = '';
     this.mgrFilterDonor = '';
-    this.mgrFilterBuyers = null;
+    this.mgrFilterCategory = '';
     this.filteredGifts = null;
   }
 

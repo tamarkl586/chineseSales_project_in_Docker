@@ -1,15 +1,23 @@
-<div class="auth-container">
+<div class="auth-page">
+  <div class="auth-decorations">
+    <div class="deco-circle deco-1"></div>
+    <div class="deco-circle deco-2"></div>
+    <div class="deco-circle deco-3"></div>
+  </div>
+
   <div class="auth-card">
+    <div class="card-accent"></div>
+
     <div class="auth-header">
-      <div class="auth-icon">
-        <svg width="56" height="56" viewBox="0 0 56 56" fill="none">
-          <circle cx="28" cy="28" r="28" fill="url(#loginGrad)" />
-          <path d="M28 18c-3.3 0-6 2.7-6 6s2.7 6 6 6 6-2.7 6-6-2.7-6-6-6zm0 16c-4 0-12 2-12 6v2h24v-2c0-4-8-6-12-6z" fill="#fff"/>
+      <div class="auth-icon-wrap">
+        <svg width="52" height="52" viewBox="0 0 52 52" fill="none">
+          <circle cx="26" cy="26" r="26" fill="url(#loginGrad)" />
+          <path d="M26 17c-3 0-5.5 2.5-5.5 5.5S23 28 26 28s5.5-2.5 5.5-5.5S29 17 26 17zm0 14.5c-3.7 0-11 1.8-11 5.5v1.5h22V37c0-3.7-7.3-5.5-11-5.5z" fill="#fff"/>
           <defs>
-            <linearGradient id="loginGrad" x1="0" y1="0" x2="56" y2="56">
-              <stop offset="0%" stop-color="#ff6b6b"/>
-              <stop offset="50%" stop-color="#ffa502"/>
-              <stop offset="100%" stop-color="#ffd93d"/>
+            <linearGradient id="loginGrad" x1="0" y1="0" x2="52" y2="52">
+              <stop offset="0%" stop-color="#3a1a0a"/>
+              <stop offset="50%" stop-color="#8b4513"/>
+              <stop offset="100%" stop-color="#cd853f"/>
             </linearGradient>
           </defs>
         </svg>
@@ -21,7 +29,7 @@
     <!-- Server Error Message -->
     @if (errorMsg) {
       <div class="alert alert-error">
-        <span class="alert-icon">⚠️</span>
+        <span class="alert-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
         <span>{{ errorMsg }}</span>
       </div>
     }
@@ -30,7 +38,7 @@
       <!-- Email Field -->
       <div class="form-group" [class.has-error]="f['email'].touched && f['email'].invalid" [class.has-success]="f['email'].touched && f['email'].valid">
         <label for="email">
-          <i class="field-icon">📧</i>
+          <i class="field-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></i>
           אימייל
         </label>
         <div class="input-wrapper">
@@ -38,7 +46,7 @@
             type="email"
             id="email"
             formControlName="email"
-            placeholder="example@email.com"
+            placeholder="example&#64;email.com"
             autocomplete="email"
             dir="ltr"
           />
@@ -79,7 +87,7 @@
       <!-- Password Field -->
       <div class="form-group" [class.has-error]="f['password'].touched && f['password'].invalid" [class.has-success]="f['password'].touched && f['password'].valid">
         <label for="password">
-          <i class="field-icon">🔒</i>
+          <i class="field-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></i>
           סיסמה
         </label>
         <div class="input-wrapper">
@@ -92,7 +100,11 @@
             dir="ltr"
           />
           <button type="button" class="toggle-password" (click)="togglePassword()" tabindex="-1">
-            {{ showPassword ? '🙈' : '👁️' }}
+            @if (showPassword) {
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+            } @else {
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            }
           </button>
         </div>
         @if (f['password'].touched && f['password'].errors) {
@@ -125,6 +137,10 @@
           <span class="btn-arrow">←</span>
         }
       </button>
+
+      <div class="auth-divider">
+        <span>או</span>
+      </div>
 
       <div class="auth-footer">
         <span>אין לך חשבון?</span>

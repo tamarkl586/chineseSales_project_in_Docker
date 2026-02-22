@@ -11,9 +11,19 @@ import { AuthService } from './services/user/auth-service';
 export class App {
   authService = inject(AuthService);
   private router = inject(Router);
+  menuOpen = false;
+
+  toggleMenu() {
+    this.menuOpen = !this.menuOpen;
+  }
+
+  closeMenu() {
+    this.menuOpen = false;
+  }
 
   logout() {
     this.authService.logout();
+    this.menuOpen = false;
     this.router.navigate(['/login']);
   }
 }

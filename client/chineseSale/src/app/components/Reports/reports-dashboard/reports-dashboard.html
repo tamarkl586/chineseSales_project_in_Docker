@@ -1,18 +1,33 @@
 <div class="reports-page">
-  <div class="page-header">
-    <h2>📊 לוח בקרה - דוחות</h2>
+  <!-- ===== HERO HEADER ===== -->
+  <div class="reports-hero">
+    <div class="hero-bg-pattern"></div>
+    <div class="hero-content">
+      <div class="hero-icon">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="20" x2="18" y2="10"/>
+          <line x1="12" y1="20" x2="12" y2="4"/>
+          <line x1="6" y1="20" x2="6" y2="14"/>
+        </svg>
+      </div>
+      <h2>לוח בקרה — דוחות</h2>
+      <p class="hero-subtitle">סיכומים ונתונים על המכירה הסינית</p>
+    </div>
   </div>
 
-  <!-- Tabs -->
-  <div class="tabs">
-    <button class="tab" [class.active]="activeTab === 'revenue'" (click)="switchTab('revenue')">💰 הכנסות</button>
-    <button class="tab" [class.active]="activeTab === 'winners'" (click)="switchTab('winners')">🏆 זוכים</button>
-    <button class="tab" [class.active]="activeTab === 'topGift'" (click)="switchTab('topGift')">⭐ מתנה מובילה</button>
-    <button class="tab" [class.active]="activeTab === 'purchasers'" (click)="switchTab('purchasers')">👥 קונים</button>
+  <!-- Tabs (pill-style like gift-list category bar) -->
+  <div class="category-bar">
+    <button class="cat-pill" [class.active]="activeTab === 'revenue'" (click)="switchTab('revenue')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> הכנסות</button>
+    <button class="cat-pill" [class.active]="activeTab === 'winners'" (click)="switchTab('winners')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg> זוכים</button>
+    <button class="cat-pill" [class.active]="activeTab === 'topGift'" (click)="switchTab('topGift')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> מתנה מובילה</button>
+    <button class="cat-pill" [class.active]="activeTab === 'purchasers'" (click)="switchTab('purchasers')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> קונים</button>
   </div>
 
   @if (loading) {
-    <div class="loading-state">טוען נתונים...</div>
+    <div class="loading-state">
+      <div class="loading-spinner"></div>
+      <span>טוען נתונים...</span>
+    </div>
   }
 
   <!-- ===== REVENUE TAB ===== -->
@@ -20,24 +35,27 @@
   <div class="tab-content">
     @if (revenueSummary) {
     <div class="stats-grid">
-      <div class="stat-card purple">
-        <div class="stat-icon">💰</div>
+      <div class="stat-card">
+        <div class="stat-icon-circle gold"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
         <div class="stat-value">{{ revenueSummary.totalRevenue }} ₪</div>
         <div class="stat-label">סה"כ הכנסות</div>
       </div>
-      <div class="stat-card blue">
-        <div class="stat-icon">🎫</div>
+      <div class="stat-card">
+        <div class="stat-icon-circle brown"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/></svg></div>
         <div class="stat-value">{{ revenueSummary.totalTicketsSold }}</div>
         <div class="stat-label">כרטיסים שנמכרו</div>
       </div>
-      <div class="stat-card green">
-        <div class="stat-icon">👥</div>
+      <div class="stat-card">
+        <div class="stat-icon-circle green"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
         <div class="stat-value">{{ revenueSummary.totalParticipants }}</div>
         <div class="stat-label">משתתפים</div>
       </div>
     </div>
     } @else {
-      <div class="empty-state">אין נתוני הכנסות עדיין</div>
+      <div class="empty-state">
+        <span class="empty-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#c5beb6" stroke-width="1.5"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg></span>
+        <p>אין נתוני הכנסות עדיין</p>
+      </div>
     }
   </div>
   }
@@ -46,15 +64,24 @@
   @if (activeTab === 'winners' && !loading) {
   <div class="tab-content">
     @if (winners.length === 0) {
-      <div class="empty-state">עדיין לא הוגרלו זוכים</div>
+      <div class="empty-state">
+        <span class="empty-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#c5beb6" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="7" x2="7.01" y2="7"/><line x1="12" y1="12" x2="12.01" y2="12"/><line x1="17" y1="17" x2="17.01" y2="17"/></svg></span>
+        <p>עדיין לא הוגרלו זוכים</p>
+      </div>
     }
-    <div class="winners-list">
+    <div class="winners-grid">
       @for (w of winners; track w.giftName) {
       <div class="winner-card">
-        <div class="winner-gift">🎁 {{ w.giftName }}</div>
-        <div class="winner-info">
-          <span class="winner-name">🏆 {{ w.winnerName }}</span>
-          <span class="winner-email">📧 {{ w.contactEmail }}</span>
+        <div class="winner-card-top">
+          <div class="winner-gift-img-wrapper">
+            <img [src]="'images/' + w.picture" [alt]="w.giftName" class="winner-gift-img" />
+          </div>
+          <div class="winner-trophy"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg></div>
+        </div>
+        <div class="winner-gift-name"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg> {{ w.giftName }}</div>
+        <div class="winner-details">
+          <span class="winner-name-tag">{{ w.winnerName }}</span>
+          <span class="winner-email-tag"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> {{ w.contactEmail }}</span>
         </div>
       </div>
       }
@@ -66,34 +93,63 @@
   @if (activeTab === 'topGift' && !loading) {
   <div class="tab-content">
     <div class="criteria-row">
-      <label>קריטריון:</label>
-      <select [(ngModel)]="topGiftCriteria" (ngModelChange)="loadTopGift()" class="criteria-select">
-        <option value="tickets">מספר כרטיסים</option>
-        <option value="revenue">הכנסות</option>
-      </select>
+      <label><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> קריטריון:</label>
+      <div class="filter-pill-wrapper" [class.active]="true">
+        <select [(ngModel)]="topGiftCriteria" (ngModelChange)="loadTopGift()" class="filter-select">
+          <option value="tickets">מספר כרטיסים</option>
+          <option value="revenue">הכנסות</option>
+        </select>
+        <span class="filter-arrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </div>
     </div>
 
     @if (topGift) {
-    <div class="top-gift-card">
-      <div class="top-icon">⭐</div>
-      <h3>{{ topGift.giftName }}</h3>
-      <div class="top-stats">
-        <div class="top-stat">
-          <span class="value">{{ topGift.price }} ₪</span>
-          <span class="label">מחיר כרטיס</span>
+    <div class="top-gift-showcase" [class.has-winner]="topGift.winnerName && topGift.winnerName !== 'N/A'">
+      <!-- Gift Image -->
+      <div class="top-gift-image-wrapper">
+        <div class="top-gift-image-glow"></div>
+        <img [src]="'images/' + topGift.picture" alt="" class="top-gift-image" />
+      </div>
+
+      <!-- Gift Info -->
+      <div class="top-gift-info">
+        <div class="top-gift-badge-label"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> המתנה המובילה</div>
+        <h3 class="top-gift-name">{{ topGift.giftName }}</h3>
+
+        <div class="top-gift-stats">
+          <div class="top-gift-stat">
+            <span class="stat-num">{{ topGift.price }} ₪</span>
+            <span class="stat-desc"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg> מחיר כרטיס</span>
+          </div>
+          <div class="top-gift-divider"></div>
+          <div class="top-gift-stat">
+            <span class="stat-num">{{ topGift.totalTicketsPurchased }}</span>
+            <span class="stat-desc"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/></svg> כרטיסים שנמכרו</span>
+          </div>
+          <div class="top-gift-divider"></div>
+          <div class="top-gift-stat">
+            <span class="stat-num">{{ topGift.totalEarned }} ₪</span>
+            <span class="stat-desc"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> סה"כ הכנסות</span>
+          </div>
         </div>
-        <div class="top-stat">
-          <span class="value">{{ topGift.totalTicketsPurchased }}</span>
-          <span class="label">כרטיסים שנמכרו</span>
+
+        <!-- Winner Section -->
+        @if (topGift.winnerName && topGift.winnerName !== 'N/A') {
+        <div class="top-gift-winner">
+          <div class="winner-ribbon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg></div>
+          <div class="winner-info">
+            <span class="winner-label">הזוכה המאושר</span>
+            <span class="winner-name-value">{{ topGift.winnerName }}</span>
+          </div>
         </div>
-        <div class="top-stat">
-          <span class="value">{{ topGift.totalEarned }} ₪</span>
-          <span class="label">סה"כ הכנסות</span>
-        </div>
+        }
       </div>
     </div>
     } @else {
-      <div class="empty-state">אין נתונים עדיין</div>
+      <div class="empty-state">
+        <span class="empty-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#c5beb6" stroke-width="1.5"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></span>
+        <p>אין נתונים עדיין</p>
+      </div>
     }
   </div>
   }
@@ -102,51 +158,110 @@
   @if (activeTab === 'purchasers' && !loading) {
   <div class="tab-content">
     @if (purchasers.length === 0) {
-      <div class="empty-state">אין רכישות במערכת</div>
+      <div class="empty-state">
+        <span class="empty-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#c5beb6" stroke-width="1.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg></span>
+        <p>אין רכישות במערכת</p>
+      </div>
     }
 
-    @for (p of purchasers; track p.userId) {
-    <div class="purchaser-card" [class.expanded]="expandedPurchaser?.userId === p.userId">
-      <div class="purchaser-header" (click)="togglePurchaser(p)">
-        <div class="purchaser-main">
-          <strong>👤 {{ p.name }}</strong>
-          <span class="purchaser-meta">📧 {{ p.email }} · 📱 {{ p.phone }}</span>
-        </div>
-        <div class="purchaser-summary">
-          <span class="badge tickets">🎫 {{ p.totalTicketsPurchased }}</span>
-          <span class="badge money">💰 {{ p.grandTotalSpent }} ₪</span>
-          <span class="expand-icon">{{ expandedPurchaser?.userId === p.userId ? '▲' : '▼' }}</span>
+    <!-- Purchaser Summary Stats -->
+    @if (purchasers.length > 0) {
+    <div class="purchaser-overview">
+      <div class="overview-stat">
+        <div class="overview-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
+        <div class="overview-info">
+          <span class="overview-number">{{ purchasers.length }}</span>
+          <span class="overview-label">רוכשים</span>
         </div>
       </div>
+      <div class="overview-divider"></div>
+      <div class="overview-stat">
+        <div class="overview-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/></svg></div>
+        <div class="overview-info">
+          <span class="overview-number">{{ getPurchasersTotalTickets() }}</span>
+          <span class="overview-label">כרטיסים</span>
+        </div>
+      </div>
+      <div class="overview-divider"></div>
+      <div class="overview-stat">
+        <div class="overview-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+        <div class="overview-info">
+          <span class="overview-number">{{ getPurchasersTotalRevenue() }} ₪</span>
+          <span class="overview-label">סה"כ הכנסות</span>
+        </div>
+      </div>
+    </div>
+    }
 
-      @if (expandedPurchaser?.userId === p.userId && p.purchaseHistory) {
-      <div class="purchaser-details">
-        <table class="history-table">
-          <thead>
-            <tr>
-              <th>מתנה</th>
-              <th>כמות</th>
-              <th>מחיר ליח'</th>
-              <th>סה"כ</th>
-              <th>תאריך</th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (h of p.purchaseHistory; track h.giftName) {
-            <tr>
-              <td><strong>{{ h.giftName }}</strong></td>
-              <td>{{ h.quantity }}</td>
-              <td>{{ h.pricePerUnit }} ₪</td>
-              <td class="price-cell">{{ h.totalPrice }} ₪</td>
-              <td>{{ h.purchaseDate | date:'dd/MM/yyyy HH:mm' }}</td>
-            </tr>
-            }
-          </tbody>
-        </table>
+    <div class="purchasers-list">
+      @for (p of purchasers; track p.userId; let i = $index) {
+      <div class="purchaser-card-v2" [class.expanded]="expandedPurchaser?.userId === p.userId" [style.animation-delay]="i * 50 + 'ms'">
+        <div class="purchaser-header-v2" (click)="togglePurchaser(p)">
+          <div class="purchaser-avatar">
+            <span>{{ p.name.charAt(0) }}</span>
+          </div>
+          <div class="purchaser-main-v2">
+            <strong>{{ p.name }}</strong>
+            <span class="purchaser-meta-v2">
+              <span class="meta-chip"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> {{ p.email }}</span>
+              <span class="meta-chip"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg> {{ p.phone }}</span>
+            </span>
+          </div>
+          <div class="purchaser-summary-v2">
+            <div class="badge-v2 tickets">
+              <span class="badge-num">{{ p.totalTicketsPurchased }}</span>
+              <span class="badge-text">כרטיסים</span>
+            </div>
+            <div class="badge-v2 money">
+              <span class="badge-num">{{ p.grandTotalSpent }} ₪</span>
+              <span class="badge-text">סה"כ</span>
+            </div>
+            <div class="expand-arrow" [class.rotated]="expandedPurchaser?.userId === p.userId">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M5 8l5 5 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        @if (expandedPurchaser?.userId === p.userId && p.purchaseHistory) {
+        <div class="purchaser-details-v2">
+          <table class="history-table-v2">
+            <thead>
+              <tr>
+                <th><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg> מתנה</th>
+                <th><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg> כמות</th>
+                <th><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg> מחיר ליח'</th>
+                <th><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> סה"כ</th>
+                <th><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> תאריך</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (h of p.purchaseHistory; track h.giftName) {
+              <tr>
+                <td>
+                  <div class="gift-name-inline">
+                    <div class="gift-dot"></div>
+                    <strong>{{ h.giftName }}</strong>
+                  </div>
+                </td>
+                <td><span class="qty-chip">{{ h.quantity }}</span></td>
+                <td>{{ h.pricePerUnit }} ₪</td>
+                <td class="price-cell">{{ h.totalPrice }} ₪</td>
+                <td class="date-cell-v2">{{ h.purchaseDate | date:'dd/MM/yyyy HH:mm' }}</td>
+              </tr>
+              }
+            </tbody>
+          </table>
+          <div class="details-footer">
+            <span>סה"כ {{ p.purchaseHistory.length }} פריטים</span>
+            <span class="details-total">{{ p.grandTotalSpent }} ₪</span>
+          </div>
+        </div>
+        }
       </div>
       }
     </div>
-    }
   </div>
   }
 </div>
