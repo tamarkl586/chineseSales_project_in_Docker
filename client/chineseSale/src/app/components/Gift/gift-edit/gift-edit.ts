@@ -26,6 +26,44 @@ export class GiftEdit implements OnInit, OnChanges {
   donors: DonorModel[] = [];
   categories: CategoryModel[] = [];
 
+  availableImages: string[] = [
+    '3D_Animation_Style_An_imagined_futuristic_technological_world_0.jpg',
+    'afz6rfi96rqDG2k1LPka--0--prsl7.jpg',
+    'cat(1).jpeg',
+    'ChatGPT Image Feb 22, 2026, 05_16_26 AM.png',
+    'default-gift.png',
+    'Designer (26).jpeg',
+    'Designer (3).png',
+    'Designer (33).jpeg',
+    'Designer (68).jpeg',
+    'Designer.png',
+    'djP8ZxvlL1ZAg97h6n4b--0--9b9f8.jpg',
+    'DreamShaper_v7_Create_a_realistic_image_of_a_silhouette_of_a_m_0.jpg',
+    'DreamShaper_v7_Perfect_imaginary_background_0.jpg',
+    'EP9IqrUL42rX3khbqif2--0--wmgbc.jpg',
+    'logo.svg',
+    'logo1.png',
+    'LxXAMcGIXVgowItOVbJB--0--fm81i.jpg',
+    'Oh6qJMXyoyMLe9VtN37M--0--o72ko.jpg',
+    'p1.jpg',
+    'p10.jpg',
+    'p11.jpeg',
+    'p12.jpeg',
+    'p2.jpeg',
+    'p2.png',
+    'p3.jpg',
+    'p4.jpg',
+    'p5.jpeg',
+    'p6.jpg',
+    'p7.jpg',
+    'p8.jpg',
+    'p9.png',
+    'uyg8wlk3BwLipVz3YqGk--0--7wb7z.jpg',
+    'YNtk8WG1X14r3IvftVIo--0--sqv61.jpg',
+    'מטבח מגניב (בלי אנשים).jpeg',
+    'מטוס עף בשמיים בכיוון מעלה מלוכסן על רקע של גאורגיה והים שלה.png'
+  ];
+
   private _id: number = -1;
 
   @Input() set id(value: number) {

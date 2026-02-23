@@ -44,9 +44,14 @@
         </div>
 
         <div class="form-group">
-            <label><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg> תמונה (URL)</label>
-            <input type="text" class="form-control" formControlName="picture" placeholder="שם קובץ התמונה" dir="ltr"
-                [class.border-danger]="frmGift.controls['picture'].invalid && frmGift.controls['picture'].touched" />
+            <label><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg> תמונה</label>
+            <select class="form-control" formControlName="picture" dir="ltr"
+                [class.border-danger]="frmGift.controls['picture'].invalid && frmGift.controls['picture'].touched">
+                <option value="" disabled>-- בחר תמונה --</option>
+                @for (img of availableImages; track img) {
+                <option [value]="img">{{ img }}</option>
+                }
+            </select>
 
             @if (frmGift.controls['picture'].touched && frmGift.controls['picture'].errors?.['required']) {
             <div class="text-danger">שדה חובה</div>
