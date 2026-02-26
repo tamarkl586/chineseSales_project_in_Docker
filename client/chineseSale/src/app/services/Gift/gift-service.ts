@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { GiftModel } from '../../models/Gift/GiftModel';
 import { CreateGiftModel } from '../../models/Gift/CreateGiftModel';
 import { GiftUpdateModel } from '../../models/Gift/GiftUpdateModel';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { PurchaserDetailsModel } from '../../models/Cart/PurchaserDetailsModel';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { CartItemModel } from '../../models/Cart/CartItemModel';
 import { Observable } from 'rxjs';

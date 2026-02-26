@@ -1,5 +1,5 @@
 import { Injectable, signal, computed } from '@angular/core';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 import { Observable, tap, map, catchError, of } from 'rxjs';
 import { LoginModel } from '../../models/user/LoginModel';
 import { RegisterModel } from '../../models/user/RegisterModel';

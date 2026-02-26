@@ -1,0 +1,29 @@
+# Node dependencies
+**/node_modules/
+
+# .NET build outputs
+**/bin/
+**/obj/
+
+# Angular dev/cache artefacts
+**/.angular/
+**/dist/
+
+# Logs
+**/Logs/
+**/*.log
+
+# Environment & secrets
+**/appsettings.Development.json
+**/.env
+**/.env.*
+
+# Version control
+**/.git/
+**/.gitignore
+
+# IDE / OS
+**/.vscode/
+**/.idea/
+**/Thumbs.db
+**/.DS_Store

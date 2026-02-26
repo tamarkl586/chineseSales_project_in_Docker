@@ -12,7 +12,7 @@ using project1.DAL.Interfaces;
 using project1.Mapping;
 using Serilog;
 using System.Text;
-// десфъ д-Namespace дргшщ мчйгег
+// пїЅпїЅпїЅпїЅпїЅ пїЅ-Namespace пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 
@@ -22,29 +22,29 @@ var builder = WebApplication.CreateBuilder(args);
 // 1. Services Configuration (Dependency Injection)
 // ==========================================
 
-// двгшъ CORS - фъшеп мщвйаъ дфрййд од-Frontend
+// пїЅпїЅпїЅпїЅпїЅ CORS - пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ-Frontend
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngularApp",
         policy =>
         {
-            policy.WithOrigins("http://localhost:4200") // длъебъ щм д-Frontend
+            policy.AllowAnyOrigin()
                   .AllowAnyHeader()
                   .AllowAnyMethod();
         });
 });
 
-// щйрей лап: двгшъ дчйгег тбеш д-JSON
+// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ: пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ-JSON
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
-        // двгшъ д-Encoder мъоек биеез ъеейн ома (лемм тбшйъ еайоев'йн)
+        // пїЅпїЅпїЅпїЅпїЅ пїЅ-Encoder пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ (пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ'пїЅпїЅ)
         options.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
     });
 
 builder.Services.AddEndpointsApiExplorer();
 
-// Swagger Configuration - двгшъ абизд очцетйъ
+// Swagger Configuration - пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo { Title = "Chinese Auction API", Version = "v1" });
@@ -56,7 +56,7 @@ builder.Services.AddSwaggerGen(options =>
         Scheme = "Bearer",
         BearerFormat = "JWT",
         In = ParameterLocation.Header,
-        Description = "ра мджйп шч аъ диечп"
+        Description = "пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ"
     });
 
     options.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -122,7 +122,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 context.Response.ContentType = "application/json";
                 return context.Response.WriteAsync(System.Text.Json.JsonSerializer.Serialize(new
                 {
-                    message = "айрк озебш мотшлъ. тмйк мбцт дъзбшеъ лгй мвщъ мръерйн аме"
+                    message = "пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ"
                 }));
             }
         };
@@ -143,21 +143,49 @@ builder.Host.UseSerilog();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
+app.UseSwagger();
+app.UseSwaggerUI();
+
+// Only redirect HTTPS outside of Docker/container environments
+if (!app.Environment.IsEnvironment("Docker"))
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseHttpsRedirection();
 }
 
-app.UseHttpsRedirection();
+// Wait for SQL Server to be ready, then apply migrations
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ProjectContext>();
+    var retries = 15;
+    while (retries > 0)
+    {
+        try
+        {
+            db.Database.Migrate();
+            Log.Information("Database migration applied successfully.");
+            break;
+        }
+        catch (Exception ex)
+        {
+            retries--;
+            Log.Warning("Database not ready, retrying in 5s... ({Retries} retries left). {Error}", retries, ex.Message);
+            Thread.Sleep(5000);
+        }
+    }
+}
 
-// дфтмъ д-CORS Middleware
+// пїЅпїЅпїЅпїЅпїЅ пїЅ-CORS Middleware
 app.UseCors("AllowAngularApp");
 
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
 app.MapControllers();
+
+app.MapFallbackToFile("index.html");
 
 app.Run();
 
@@ -193,7 +221,7 @@ app.Run();
 //builder.Services.AddControllers();
 //builder.Services.AddEndpointsApiExplorer();
 
-//// Swagger Configuration - двгшъ абизд очцетйъ
+//// Swagger Configuration - пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 //builder.Services.AddSwaggerGen(options =>
 //{
 //    options.SwaggerDoc("v1", new OpenApiInfo { Title = "Chinese Auction API", Version = "v1" });
@@ -205,7 +233,7 @@ app.Run();
 //        Scheme = "Bearer",
 //        BearerFormat = "JWT",
 //        In = ParameterLocation.Header,
-//        Description = "ра мджйп шч аъ диечп"
+//        Description = "пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ"
 //    });
 
 //    options.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -271,7 +299,7 @@ app.Run();
 //                context.Response.ContentType = "application/json";
 //                return context.Response.WriteAsync(System.Text.Json.JsonSerializer.Serialize(new
 //                {
-//                    message = "айрк озебш мотшлъ. тмйк мбцт дъзбшеъ лгй мвщъ мръерйн аме"
+//                    message = "пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ"
 //                }));
 //            }
 //        };

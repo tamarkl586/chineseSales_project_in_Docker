@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CategoryModel } from '../../models/Category/CategoryModel';
 import { CategoryCreateModel } from '../../models/Category/CategoryCreateModel';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
