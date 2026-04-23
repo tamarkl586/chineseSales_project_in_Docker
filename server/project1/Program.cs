@@ -137,6 +137,11 @@ Log.Logger = new LoggerConfiguration()
 
 builder.Host.UseSerilog();
 
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration["Redis_ConnectionString"];
+});
+
 // ==========================================
 // 3. Middleware Pipeline
 // ==========================================

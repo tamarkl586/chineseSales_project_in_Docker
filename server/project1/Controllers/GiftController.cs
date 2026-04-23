@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using project1.BLL.Interfaces;
 using project1.DTOs.Gift;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Caching.Distributed;
+using System.Text.Json;
 
 namespace project1.Controllers
 {
@@ -12,11 +14,13 @@ namespace project1.Controllers
     {
         private readonly IGiftService _service;
         private readonly ILogger<GiftController> _logger;
+        private readonly IDistributedCache _cache;
 
-        public GiftController(IGiftService service, ILogger<GiftController> logger)
+        public GiftController(IGiftService service, ILogger<GiftController> logger, IDistributedCache cache)
         {
             _service = service;
             _logger = logger;
+            _cache = cache;
         }
 
         
@@ -27,8 +31,23 @@ namespace project1.Controllers
             _logger.LogInformation("Request received to fetch all gifts.");
             try
             {
+                const string cacheKey = "all_gifts_cache";
+                var cachedData = await _cache.GetStringAsync(cacheKey);
+                if (cachedData != null)
+                {
+                    _logger.LogInformation("Cache hit for all gifts.");
+                    var gifts = JsonSerializer.Deserialize<List<GiftDTO>>(cachedData);
+                    return Ok(gifts);
+                }
+                _logger.LogInformation("Cache miss for all gifts. Fetching from service.");
                 var gifts = await _service.GetAllAsync();
-                _logger.LogInformation("Successfully retrieved {Count} gifts.", gifts.Count);
+                var serializedData = JsonSerializer.Serialize(gifts);
+                var options = new DistributedCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(30)
+                };
+                await _cache.SetStringAsync(cacheKey, serializedData, options);
+                _logger.LogInformation("Successfully retrieved {Count} gifts and cached.", gifts.Count);
                 return Ok(gifts);
             }
             catch (Exception ex)
