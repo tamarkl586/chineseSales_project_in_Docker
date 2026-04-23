@@ -44,7 +44,7 @@ namespace project1.Controllers
                 var serializedData = JsonSerializer.Serialize(gifts);
                 var options = new DistributedCacheEntryOptions
                 {
-                    AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(30)
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(300)
                 };
                 await _cache.SetStringAsync(cacheKey, serializedData, options);
                 _logger.LogInformation("Successfully retrieved {Count} gifts and cached.", gifts.Count);
